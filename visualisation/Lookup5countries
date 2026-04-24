@@ -37,7 +37,7 @@ def generate_covid_plot():
         label = 'Confirmed Cases'
         color_palette = 'Blues_r'
 
-    # Filter the dataframe for the selected countries
+
     filtered_df = df[df['Country/Region'].isin(selected_countries)]
 
 
