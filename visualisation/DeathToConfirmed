@@ -1,41 +1,31 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Load data
-df = pd.read_csv('country_wise_latest.csv')
+
+def load_data():
+    df = pd.read_csv('country_wise_latest.csv')
+    return df.dropna(subset=['Deaths / 100 Cases'])
 
 
-df = df.dropna(subset=['Deaths / 100 Cases'])
+def get_top_ratios(df):
+    return df[['Country/Region', 'Deaths / 100 Cases']] \
+        .sort_values(by='Deaths / 100 Cases', ascending=False) \
+        .head(10)
 
 
-top_ratios = df[['Country/Region', 'Deaths / 100 Cases']] \
-    .sort_values(by='Deaths / 100 Cases', ascending=False) \
-    .head(10)
+def plot_ratios(top_ratios):
+    countries = top_ratios['Country/Region']
+    values = top_ratios['Deaths / 100 Cases']
 
-# Extract values
-countries = top_ratios['Country/Region']
-values = top_ratios['Deaths / 100 Cases']
+    plt.figure(figsize=(10, 6))
+    plt.barh(countries, values)
+    plt.gca().invert_yaxis()
 
+    for i, v in enumerate(values):
+        plt.text(v, i, f'{v:.2f}%', va='center')
 
-plt.figure(figsize=(10, 6))
+    plt.title('Top 10 Countries by Death to Confirmed Ratio (%)')
+    plt.xlabel('Deaths per 100 Cases (%)')
+    plt.ylabel('Country/Region')
 
-
-plt.barh(countries, values)
-
-
-plt.gca().invert_yaxis()
-
-
-for i, v in enumerate(values):
-    plt.text(v, i, f'{v:.2f}%', va='center')
-
-plt.title('Top 10 Countries by Death to Confirmed Ratio (%)', fontsize=14)
-plt.xlabel('Deaths per 100 Cases (%)', fontsize=12)
-plt.ylabel('Country/Region', fontsize=12)
-
-
-plt.tight_layout()
-
-
-plt.savefig('top_death_ratios.png')
-plt.show()
+    plt.tight_layout()
