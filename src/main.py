@@ -248,13 +248,13 @@ while True:
         plot_recovery_rate()
 
     elif choice == '11':
-        Correleaton()
+        Correleaton_plot()
 
     elif choice == '12':
-        DeathToConfirmed()
+        death_ratio_plot()
 
     elif choice == '13':
-        Lookup5Countries()
+        generate_covid_plot()
 
     elif choice == '14':
         break
