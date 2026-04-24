@@ -193,6 +193,23 @@ def create_plot(df):
     plt.grid(True)
     plt.tight_layout()
 
+def plot_ratios(top_ratios):
+    countries = top_ratios['Country/Region']
+    values = top_ratios['Deaths / 100 Cases']
+
+    plt.figure(figsize=(10, 6))
+    plt.barh(countries, values)
+    plt.gca().invert_yaxis()
+
+    for i, v in enumerate(values):
+        plt.text(v, i, f'{v:.2f}%', va='center')
+
+    plt.title('Top 10 Countries by Death to Confirmed Ratio (%)')
+    plt.xlabel('Deaths per 100 Cases (%)')
+    plt.ylabel('Country/Region')
+
+    plt.tight_layout()
+
 while True:
     print("\nMenu:")
     print("1. Find country with most deaths in a specific month")
@@ -267,7 +284,7 @@ while True:
         create_plot()
 
     elif choice == '12':
-        death_ratio_plot()
+        plot_ratios()
 
     elif choice == '13':
         generate_covid_plot()
