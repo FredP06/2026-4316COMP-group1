@@ -1,31 +1,40 @@
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib.ticker as ticker
 
+def load_data():
+    return pd.read_csv('country_wise_latest.csv')
 
-df = pd.read_csv('country_wise_latest.csv')
+def setup_theme():
+    sns.set_theme(style="whitegrid")
 
+def create_plot(df):
+    plt.figure(figsize=(10, 6))
+    ax = sns.regplot(x='Deaths', y='Confirmed', data=df,
+                     scatter_kws={'alpha':0.5, 'color':'blue'},
+                     line_kws={'color':'red'})
 
-sns.set_theme(style="whitegrid")
+    plt.title('Correlation between Deaths and Confirmed Cases')
+    plt.xlabel('Deaths')
+    plt.ylabel('Confirmed Cases')
 
+    ax.xaxis.set_major_formatter(ticker.FuncFormatter(lambda x, p: format(int(x), ',')))
+    ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda x, p: format(int(x), ',')))
 
-plt.figure(figsize=(10, 6))
-ax = sns.regplot(x='Deaths', y='Confirmed', data=df, 
-                 scatter_kws={'alpha':0.5, 'color':'blue'}, 
-                 line_kws={'color':'red'})
+    plt.grid(True)
+    plt.tight_layout()
 
-plt.title('Correlation between Deaths and Confirmed Cases', fontsize=14)
-plt.xlabel('Deaths', fontsize=12)
-plt.ylabel('Confirmed Cases', fontsize=12)
+def save_and_show():
+    plt.savefig('confirmed_vs_deaths_whole_numbers.png')
+    plt.show()
 
-
-ax.xaxis.set_major_formatter(ticker.FuncFormatter(lambda x, p: format(int(x), ',')))
-ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda x, p: format(int(x), ',')))
-
-plt.grid(True, linestyle='--', alpha=0.6)
-plt.tight_layout()
+def main():
+    df = load_data()
+    setup_theme()
+    create_plot(df)
+    save_and_show()
 
 if __name__ == "__main__":
-plt.savefig('confirmed_vs_deaths_whole_numbers.png')
-plt.show()
+    main()
