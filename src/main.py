@@ -177,6 +177,22 @@ def plot_recovery_rate():
     plt.tight_layout()
     plt.show()
 
+def create_plot(df):
+    plt.figure(figsize=(10, 6))
+    ax = sns.regplot(x='Deaths', y='Confirmed', data=df,
+                     scatter_kws={'alpha':0.5, 'color':'blue'},
+                     line_kws={'color':'red'})
+
+    plt.title('Correlation between Deaths and Confirmed Cases')
+    plt.xlabel('Deaths')
+    plt.ylabel('Confirmed Cases')
+
+    ax.xaxis.set_major_formatter(ticker.FuncFormatter(lambda x, p: format(int(x), ',')))
+    ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda x, p: format(int(x), ',')))
+
+    plt.grid(True)
+    plt.tight_layout()
+
 while True:
     print("\nMenu:")
     print("1. Find country with most deaths in a specific month")
@@ -248,7 +264,7 @@ while True:
         plot_recovery_rate()
 
     elif choice == '11':
-        Correleaton_plot()
+        create_plot()
 
     elif choice == '12':
         death_ratio_plot()
