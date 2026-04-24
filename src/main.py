@@ -210,6 +210,75 @@ def plot_ratios(top_ratios):
 
     plt.tight_layout()
 
+def generate_covid_plot():
+    # exception handling lol
+    try:
+        df = pd.read_csv('country_wise_latest.csv')
+    except FileNotFoundError:
+        print("Error: 'country_wise_latest.csv' not found. Please ensure the file is in the same folder.")
+        return
+
+    
+    print("Enter 5 countries exactly as they appear in the dataset (e.g., US, India, Brazil, France, Spain):")
+    selected_countries = []
+    for i in range(5):
+        country = input(f"Country {i+1}: ").strip()
+        selected_countries.append(country)
+
+  
+    print("\nWhich metric would you like to visualize?")
+    print("Type 'cases' for Confirmed Cases or 'deaths' for total Deaths.")
+    choice = input("Your choice: ").strip().lower()
+
+  
+    if choice == 'cases':
+        column = 'Confirmed'
+        label = 'Confirmed Cases'
+        color_palette = 'Blues_r'
+    elif choice == 'deaths':
+        column = 'Deaths'
+        label = 'Total Deaths'
+        color_palette = 'Reds_r'
+    else:
+        print("Invalid choice. Defaulting to 'Confirmed Cases'.")
+        column = 'Confirmed'
+        label = 'Confirmed Cases'
+        color_palette = 'Blues_r'
+
+
+    filtered_df = df[df['Country/Region'].isin(selected_countries)]
+
+
+    if filtered_df.empty:
+        print("Error: None of the entered countries were found in the dataset. Please check your spelling.")
+        return
+
+ 
+    filtered_df = filtered_df.sort_values(by=column, ascending=False)
+
+   
+    plt.figure(figsize=(10, 6))
+    sns.barplot(x='Country/Region', y=column, data=filtered_df, palette=color_palette)
+
+  
+    plt.title(f'Comparison of {label} in Selected Countries', fontsize=15)
+    plt.xlabel('Country', fontsize=12)
+    plt.ylabel(label, fontsize=12)
+    
+   
+    from matplotlib.ticker import FuncFormatter
+    plt.gca().yaxis.set_major_formatter(FuncFormatter(lambda x, p: format(int(x), ',')))
+
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+
+   
+    file_name = f"custom_{choice}_plot.png"
+    plt.savefig(file_name)
+    print(f"\nSuccess! Your plot has been saved as {file_name}")
+    plt.show()
+
+
 while True:
     print("\nMenu:")
     print("1. Find country with most deaths in a specific month")
