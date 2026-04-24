@@ -2,6 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 import numpy as np
+import seaborn as sns
+import matplotlib.ticker as ticker
 
 data = pd.read_csv("../data/covid_19_clean_complete.csv")
 data.columns = data.columns.str.strip()
@@ -294,7 +296,7 @@ while True:
     print("11. Correlation between deaths and cases")
     print("12. Deaths to confirmed cases)")
     print("13. Lookup 5 countries")
-    print("11. Exit")
+    print("14. Exit")
 
     choice = input("Enter your choice (1-11): ").strip()
 
@@ -350,11 +352,15 @@ while True:
         plot_recovery_rate()
 
     elif choice == '11':
-        create_plot()
+    df = pd.read_csv('country_wise_latest.csv')
+    create_plot(df)
 
     elif choice == '12':
-        plot_ratios()
-
+    df = pd.read_csv('country_wise_latest.csv')
+    df['Deaths / 100 Cases'] = (df['Deaths'] / df['Confirmed']) * 100
+    top_ratios = df.nlargest(10, 'Deaths / 100 Cases')[['Country/Region', 'Deaths / 100 Cases']]
+    plot_ratios(top_ratios)
+    
     elif choice == '13':
         generate_covid_plot()
 
