@@ -26,6 +26,6 @@ ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda x, p: format(int(x), ',
 plt.grid(True, linestyle='--', alpha=0.6)
 plt.tight_layout()
 
-
+if __name__ == "__main__":
 plt.savefig('confirmed_vs_deaths_whole_numbers.png')
 plt.show()
